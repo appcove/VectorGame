@@ -52,7 +52,7 @@ class application(
   # Beginning of Request handler
   def RequestStart(self):
     App.Enter(Log = self.Log)
-    App.Log('PointHandlerStart:' + self.SessionToken[0:12] + ':URI=' + self.Env.URI)
+    App.Log('PointHandlerStart:' + self.SessionToken[0:12])# + ':URI=' + self.Env.URI)
 
     # Setup the browser session key object
     self.BrowserSession = SessionKey('BrowserSession', self.SessionToken)

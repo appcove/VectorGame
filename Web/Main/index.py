@@ -7,14 +7,19 @@ def Request(self):
   yield
 
 
-  self.UI.Head('''
-    <script type="text/paperscript" canvas="canvas" src="index.paper.js"></script>
-    ''')
+  #self.UI.Head('''
+  #  <script type="text/paperscript" canvas="canvas" src="index.paper.js"></script>
+  #  ''')
+
+
+  self.UI.JSData.PlayerList = App.DB.RowList('''SELECT * FROM "Main"."Player"''')
+
+  self.UI.JSDeps.append('./index.js')
+  
 
   self.UI.Body('''
     <strong>VectorGame</strong>
     <hr>
-
     
   
     ''')

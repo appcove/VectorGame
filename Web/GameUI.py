@@ -62,7 +62,7 @@ class PrimaryLayout(LayoutResponse):
         <script src="/lib/bootstrap-3.3.1/js/bootstrap.min.js"></script>
         <script src="/lib/select2-3.5.2/select2.min.js"></script>
         <script src="/lib/jquery.autosize.min.js"></script>
-        <script src="/lib/paperjs-0.9.21/paper-full.min.js"></script>
+        <script src="/lib/paperjs-0.9.21/paper-full.js"></script>
 
         ''' + self.JS.HTML() + '''
         ''' + WIF(self.Script.Value, '<script>', '</script>') + '''

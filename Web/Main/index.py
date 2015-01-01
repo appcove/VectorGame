@@ -20,6 +20,7 @@ def Request(self):
   self.UI.Body('''
     <strong>VectorGame</strong>
     <hr>
+    <div><a href="test001">Test 001 - hue and mouse events</a></div>
     
   
     ''')

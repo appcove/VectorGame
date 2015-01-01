@@ -10,19 +10,6 @@ define(['exports', 'App'], function(self, App) {
   // Create an empty project and a view for the canvas:
   paper.setup(canvas);
   
-  // Create a Paper.js Path to draw a line into it:
-  var path = new paper.Path();
-  // Give the stroke a color
-  path.strokeColor = 'black';
-  
-  
-  _.each(App.Data.PlayerList, function(row) {
-    var c = paper.Path.Circle(row.Location_Current, 10);
-    c.setFillColor(row.Color);
-    
-
-  });
-
   
   var xpath = new paper.Path.Rectangle([75, 75], [100, 100]);
   xpath.strokeColor = 'black';
@@ -35,16 +22,13 @@ define(['exports', 'App'], function(self, App) {
 
   var path = null;
   var cir = null;
-  var hue = 0;
 
   var tool = new paper.Tool();
   tool.onMouseDown = function(event) {
     if(path) {
       if(cir.position.isClose(event.point, 10)) {
         path.add(cir.position);
-        path.fillColor = 'blue';
-        hue += 10;
-        path.fillColor.hue += hue;
+        path.fillColor = cir.fillColor;
         cir.remove();
         cir = null;
         path = null;
@@ -55,7 +39,7 @@ define(['exports', 'App'], function(self, App) {
     }
     else {
       cir = paper.Path.Circle(event.point, 10);
-      cir.fillColor = 'red';
+      cir.fillColor = xpath.fillColor;
       
       path = new paper.Path();
       path.strokeColor = 'black';

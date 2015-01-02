@@ -8,7 +8,7 @@ import re
 import AppStruct.Web.Handler.Point
 import AppStruct.Web.Plugin
 
-import Project.Web.GameUI
+import Project.Web.MainUI
 
 
 ###############################################################################
@@ -118,7 +118,7 @@ def Init(self):
     raise ValueError('Invalid value for self.RequireProtocol: {0}'.format(repr(self.RequireProtocol)))
 
  
-  self.UI = self.Response(Project.Web.GameUI.PrimaryLayout)
+  self.UI = self.Response(Project.Web.MainUI.PrimaryLayout)
 
   yield
 

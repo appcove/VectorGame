@@ -47,7 +47,7 @@ if Postgres.Username is None:
 
 # --
 if Main.ServerName is None:
-  Main.ServerName = DomainConverter.LiveToDev('vectorgame.gahooa.com')
+  Main.ServerName = DomainConverter.LiveToDev('play.gahooa.com')
 
 if Main.SSLServerName is None:
   Main.SSLServerName = Main.ServerName

@@ -2,15 +2,15 @@
 
 from Project import *
 
+from os.path import dirname, join, basename
+
 @Expose
 def Request(self):
   yield
 
 
-
-  self.UI.JSDeps.append('./test001.js')
+  self.UI.JSDeps.append(join(dirname(self.Env.ScriptPath), basename(self.Env.ScriptPath) or 'index' + '.js'))
   
-
   self.UI.Body('''
     <strong>Handling Events</strong>
     <hr>

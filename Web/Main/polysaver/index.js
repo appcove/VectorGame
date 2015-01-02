@@ -4,20 +4,41 @@ vim:encoding=utf-8:ts=2:sw=2:expandtab
 
 define(['exports', 'App'], function(self, App) {
 
-
   // Get a reference to the canvas object
   var canvas = document.getElementById('canvas');
+  
   // Create an empty project and a view for the canvas:
   paper.setup(canvas);
+
+  // Setup the canvas to 
+  function ResizeCanvas() {
+    paper.view.viewSize = [window.innerWidth-300, window.innerHeight];
+  }
+  $(window).resize(ResizeCanvas);
+  ResizeCanvas();
   
+  var xcircle = new paper.Path.Circle([74,74], 72);
+  xcircle.strokeColor = 'black';
+  xcircle.fillColor = "#ccc";
   
-  var xpath = new paper.Path.Rectangle([75, 75], [100, 100]);
+  var xpath = new paper.Path.Rectangle([24, 24], [100, 100]);
   xpath.strokeColor = 'black';
   xpath.fillColor = 'blue';
 
+  var xrotate = .5;
+  var xaccel = xrotate * 1.256;
+  var xcolor = 1;
+
   paper.view.onFrame = function(event) {
-    xpath.rotate(.5);
-    xpath.fillColor.hue += .5;
+    if(xcircle.strokeBounds.right > paper.view.size.width || xcircle.strokeBounds.left < 0) {
+      xaccel = -xaccel;
+      xrotate = -xrotate;
+    }
+
+    xpath.rotate(xrotate);
+    xpath.fillColor.hue += xcolor;
+    xpath.position.x += xaccel;
+    xcircle.position.x += xaccel;
   };
 
   var path = null;

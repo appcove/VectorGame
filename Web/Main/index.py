@@ -13,7 +13,7 @@ def Request(self):
     <h4><a href="/game/">Vector Game</a></h4>
     This is a game of strategy, intel, and patience.
     <hr>
-    <h4><a href="/demo/polysaver/">Polysaver</a></h4>
+    <h4><a href="/polysaver/">Polysaver</a></h4>
     This is a fun vector graphics program.
     
   

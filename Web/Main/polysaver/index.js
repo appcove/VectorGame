@@ -56,10 +56,24 @@ define(['exports', 'require', 'App'], function(self, require, App) {
 
   var tool = new paper.Tool();
   tool.onMouseDown = function(event) {
+    console.log(event);
+
+    if(event.event.button !== 0) {
+      return;
+    }
+
+    if(event.event.shiftKey && event.item && event.item.data.type === 'polygon') { 
+      event.item.remove();
+      Polygons = _.without(Polygons, event.item);
+      return;
+    }
+
+
     if(path) {
       if(cir.position.isClose(event.point, 10)) {
-        path.add(cir.position);
+        path.closePath(true);
         path.fillColor = cir.fillColor;
+        path.data.type = 'polygon';
         cir.remove();
         cir = null;
         Polygons.push(path);
@@ -76,7 +90,7 @@ define(['exports', 'require', 'App'], function(self, require, App) {
       path = new paper.Path();
       path.strokeColor = 'black';
       path.add(event.point);
-
+      
       PATH = path;
     }
   };
@@ -125,12 +139,15 @@ define(['exports', 'require', 'App'], function(self, require, App) {
       var path;
       path = new paper.Path();
       path.strokeColor = 'black';
-      path.fillColor = pg.Color;
+      path.data.type = 'polygon';
       
       _.each(pg.Segments, function(pt) {
         path.add(pt);
       });
 
+      path.closePath();
+      path.fillColor = pg.Color;
+      
       Polygons.push(path);
 
     });

@@ -50,7 +50,17 @@ def Request(self):
   
   self.UI.Body('''
     <h2>polysaver</h2>
-    A fun little game of drawing polygons.
+    <p>
+      A fun little game of drawing polygons.
+    </p>
+    
+    <p>
+      <small>
+        Click anywhere to start a polygon, then click elsewhere to add segments.
+        When you are done making the polygon, click the starting position to finish.
+        Hold the `Shift` key and click on any polygon to remove it.
+      </small>
+    </p>
     <hr>
     <p>
       <strong><a href="/polysaver/">Start A New Board</a></strong>

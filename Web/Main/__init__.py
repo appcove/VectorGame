@@ -116,7 +116,11 @@ def Init(self):
       yield self.RedirectResponse(target)
   elif self.RequireProtocol is not None:
     raise ValueError('Invalid value for self.RequireProtocol: {0}'.format(repr(self.RequireProtocol)))
-
+  
+  
+  # If this is a JSON response, auto parse incoming JSON data in the 'Data' post var.
+  if self.RequestType == 'json':
+    self.PostData = JD(self.Post.Data) if 'Data' in self.Post else None
  
   self.UI = self.Response(Project.Web.MainUI.PrimaryLayout)
 

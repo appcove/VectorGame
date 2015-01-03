@@ -2,7 +2,15 @@
 vim:encoding=utf-8:ts=2:sw=2:expandtab 
 */
 
-define(['exports', 'App'], function(self, App) {
+var PATH, POLYGONS;
+
+define(['exports', 'require', 'App'], function(self, require, App) {
+
+  var Board = App.Data.Board;
+  console.log(Board);
+  var Polygons = [];
+
+  POLYGONS = Polygons;
 
   // Get a reference to the canvas object
   var canvas = document.getElementById('canvas');
@@ -41,6 +49,8 @@ define(['exports', 'App'], function(self, App) {
     xcircle.position.x += xaccel;
   };
 
+  
+
   var path = null;
   var cir = null;
 
@@ -52,6 +62,7 @@ define(['exports', 'App'], function(self, App) {
         path.fillColor = cir.fillColor;
         cir.remove();
         cir = null;
+        Polygons.push(path);
         path = null;
       }
       else {
@@ -65,8 +76,67 @@ define(['exports', 'App'], function(self, App) {
       path = new paper.Path();
       path.strokeColor = 'black';
       path.add(event.point);
+
+      PATH = path;
     }
   };
+
+
+
+  $('#savelink').click(function(ev) {
+    ev.preventDefault();
+
+    var BoardData = {Polygons: []};
+
+    _.each(Polygons, function(pp) {
+      var pg = {};
+      pg.Color = pp.fillColor.toCSS(true);
+      pg.Segments = []
+      _.each(pp.segments, function(seg) {
+        pg.Segments.push([seg.point.x, seg.point.y]);
+      });
+      BoardData.Polygons.push(pg);
+    });
+
+
+    App.Post(
+      require.toUrl('./ajax/Save'),
+      {
+        Board_GSID: Board.Board_GSID,
+        Data: BoardData,
+      },
+      {
+        Data: function(data) {
+          console.log(data);
+          window.location.href = data.URL;
+        }
+      }
+    );
+      
+
+  });
+
+
+  
+  if(Board.Data && Board.Data.Polygons) {
+    _.each(Board.Data.Polygons, function(pg, i) {
+      console.log(pg);
+
+      var path;
+      path = new paper.Path();
+      path.strokeColor = 'black';
+      path.fillColor = pg.Color;
+      
+      _.each(pg.Segments, function(pt) {
+        path.add(pt);
+      });
+
+      Polygons.push(path);
+
+    });
+  }
+
+
 
 
   // Draw the view now:

@@ -43,11 +43,19 @@ class User(metaclass=MetaRecord):
     def InsertDefault(self):
       return SQL('NOW()')
 
-  class Name(String):
+  class FirstName(String):
     Flags = +Read +Write +InsertRequired
     MaxLength = 70
     Label = 'Name'
 
+  class LastName(String):
+    Flags = +Read +Write +InsertRequired
+    MaxLength = 70
+    Label = 'Name'
+
+  @property
+  def Name(self):
+    return "{0} {1}".format(self.FirstName, self.LastName)
   class Email(String):
     Flags = +Read +Write +InsertRequired 
     MaxLength = 100
@@ -125,20 +133,11 @@ class User(metaclass=MetaRecord):
   class Perm_Active(Boolean):
     Flags = +Read +Write
     Label = 'Status'
-    @property
-    def InsertDefault(self):
-      return True
-    def Validate(self, record, fv):
-      return True
+    InsertDefault = True
 
-  class Perm_Admin(Boolean):
+  class Perm_Super(Boolean):
     Flags = +Read +Write
-    Label = 'Account Admin'
-    @property
-    def InsertDefault(self):
-      return False
-    def Validate(self, record, fv):
-      return True
+    InsertDefault = False
     
 ###############################################################################
 def SaltAndHashPassword(Username, Password):

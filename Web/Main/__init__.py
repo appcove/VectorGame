@@ -29,12 +29,9 @@ class application(
   AppSession = None  # App Session Key
   PostData = None  # JSON Decoded data from POST
   
-  Auth_Required = True  # Is auth required for this request?
+  Auth_Required = False  
   BrowserSession = None
-  EntitySession = None
-
-  Perm_Active_Required = True
-  Perm_Admin_Required = False
+  UserSession = None
 
   # Set to 'http' to force http, 'https' to force https, or None to accept either.
   RequireProtocol = None
@@ -121,6 +118,33 @@ def Init(self):
   # If this is a JSON response, auto parse incoming JSON data in the 'Data' post var.
   if self.RequestType == 'json':
     self.PostData = JD(self.Post.Data) if 'Data' in self.Post else None
+  
+  # # Attempt to get the user ID from redis (this indicates we are logged in)
+  # User_MNID = App.Redis.get_int(self.AppSession.User_MNID)
+  # See if we can get a logged in user
+  User_MNID = App.Redis.get_int(self.BrowserSession.User_MNID)
+  App.Log('User_MNID is   ' + str(User_MNID))
+
+  # If a User_MNID was returned, then we have a logged in user
+  if User_MNID:
+
+    # If session has < 1 hour, then set it to expire in 1 hour
+    if int(App.Redis.ttl(self.BrowserSession.User_MNID) or 0) < 3600:
+      App.Redis.expire(self.BrowserSession.User_MNID, 3600)
+
+    try:
+      # Create the user object
+      self.User = Project.Main.User.User(User_MNID)
+    except App.DB.NotOneFound:
+      App.Redis.delete(self.BrowserSession.User_MNID)
+
+    # Create the entity session object.
+    self.UserSession = SessionKey('UserSession', self.SessionToken, User_MNID)
+
+
+  # User is only logged in if we were actually able to load them above.
+  if self.Auth_Required and not self.User:
+    raise AuthenticationError('Login required.')
  
   self.UI = self.Response(Project.Web.MainUI.PrimaryLayout)
 

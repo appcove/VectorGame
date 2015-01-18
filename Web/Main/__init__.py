@@ -10,6 +10,7 @@ import AppStruct.Web.Plugin
 
 import Project.Web.MainUI
 
+import Project.Main.User
 
 ###############################################################################
 class application(

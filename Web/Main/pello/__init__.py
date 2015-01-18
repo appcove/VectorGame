@@ -7,19 +7,20 @@ import re
 
 VALID_MATCH = re.compile('^[a-z0-9]{16}$').match
 
-def PolySaverURL(Board_GSID):
-  return App.Main_HTTPS_URL + '/polysaver/' + (Board_GSID or '')
+def PelloURL(Board_GSID):
+  return App.Main_HTTPS_URL + '/pello/' + (Board_GSID or '')
 
 @Expose
 def Mapper(self, parts):
   if len(parts) == 1:
     if VALID_MATCH(parts[0]):
       self.Map.Board_GSID = parts[0]
-      return ('index',)
+      return ('detail',)
 
 
 @Expose
 def Init(self):
+  self.Auth_Required = True
   yield
   self.UI = self.Response(Project.Web.DemoUI.PrimaryLayout)
   yield
